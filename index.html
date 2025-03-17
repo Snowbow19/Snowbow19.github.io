@@ -53,6 +53,31 @@
             margin-right: 20px;
             border-radius: 8px;
         }
+        .upload-form {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .upload-form input, .upload-form textarea, .upload-form button {
+            display: block;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .upload-form button {
+            background-color: #007FFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .upload-form button:hover {
+            background-color: #005BBB;
+        }
         .item-details {
             flex: 1;
         }
@@ -89,33 +114,60 @@
     </nav>
     <div class="container">
         <h2>最新商品</h2>
-        <div class="item">
-            <img src="https://via.placeholder.com/120" alt="商品图片">
-            <div class="item-details">
-                <h3>二手书籍：高等数学</h3>
-                <p>九成新，适合大一学生使用。</p>
-                <p class="price">￥20</p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="https://via.placeholder.com/120" alt="商品图片">
-            <div class="item-details">
-                <h3>二手自行车</h3>
-                <p>七成新，适合校园代步。</p>
-                <p class="price">￥150</p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="https://via.placeholder.com/120" alt="商品图片">
-            <div class="item-details">
-                <h3>二手耳机</h3>
-                <p>音质良好，带麦克风。</p>
-                <p class="price">￥50</p>
-            </div>
-        </div>
+        <div id="product-list"></div>
     </div>
     <footer>
         <p>© 2025 校园二手平台. 版权所有.</p>
     </footer>
+    <script>
+        const products = [
+            {
+                name: "二手书籍：高等数学",
+                description: "九成新，适合大一学生使用。",
+                price: "￥20",
+                image: "https://via.placeholder.com/120"
+            },
+            {
+                name: "二手自行车",
+                description: "七成新，适合校园代步。",
+                price: "￥150",
+                image: "https://via.placeholder.com/120"
+            },
+            {
+                name: "二手耳机",
+                description: "音质良好，带麦克风。",
+                price: "￥50",
+                image: "https://via.placeholder.com/120"
+            },
+            {
+                name: "二手台灯",
+                description: "八成新，适合宿舍使用。",
+                price: "￥30",
+                image: "https://via.placeholder.com/120"
+            },
+            {
+                name: "二手笔记本电脑",
+                description: "九成新，适合学习和娱乐。",
+                price: "￥2000",
+                image: "https://via.placeholder.com/120"
+            }
+        ];
+
+        const productList = document.getElementById("product-list");
+
+        products.forEach(product => {
+            const item = document.createElement("div");
+            item.className = "item";
+            item.innerHTML = `
+                <img src="${product.image}" alt="商品图片">
+                <div class="item-details">
+                    <h3>${product.name}</h3>
+                    <p>${product.description}</p>
+                    <p class="price">${product.price}</p>
+                </div>
+            `;
+            productList.appendChild(item);
+        });
+    </script>
 </body>
 </html>
