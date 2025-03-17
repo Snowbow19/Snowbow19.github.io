@@ -7,10 +7,10 @@
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #fbc2eb);
             background-size: 400% 400%;
-            animation: gradient 10s ease infinite;
+            animation: gradient 8s ease infinite;
         }
 
         @keyframes gradient {
@@ -22,6 +22,10 @@
         .container {
             display: flex;
             height: 100vh;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px;
         }
 
         .sidebar {
@@ -35,6 +39,25 @@
         .sidebar h2 {
             text-align: center;
             margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #3a3d41;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar ul li:hover {
+            background-color: #4a4e52;
         }
 
         .chat {
@@ -46,8 +69,10 @@
         .chat-header {
             background-color: #23272a;
             color: white;
-            padding: 10px 20px;
+            padding: 15px 20px;
             text-align: center;
+            font-size: 1.5em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .chat-messages {
@@ -55,12 +80,31 @@
             padding: 20px;
             overflow-y: auto;
             background-color: #f6f6f6;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .chat-messages p {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            max-width: 70%;
+        }
+
+        .chat-messages p strong {
+            color: #333;
         }
 
         .chat-input {
             display: flex;
-            padding: 10px;
+            padding: 15px;
             background-color: #23272a;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .chat-input input {
@@ -69,6 +113,7 @@
             border: none;
             border-radius: 5px;
             margin-right: 10px;
+            font-size: 1em;
         }
 
         .chat-input button {
@@ -78,6 +123,8 @@
             background-color: #7289da;
             color: white;
             cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
         }
 
         .chat-input button:hover {
@@ -99,15 +146,50 @@
             <div class="chat-header">
                 <h2>聊天窗口</h2>
             </div>
-            <div class="chat-messages">
+            <div class="chat-messages" id="chat-messages">
                 <p><strong>用户1:</strong> 你好！</p>
                 <p><strong>用户2:</strong> 你好，今天怎么样？</p>
             </div>
             <div class="chat-input">
-                <input type="text" placeholder="输入消息...">
-                <button>发送</button>
+                <input type="text" id="message-input" placeholder="输入消息...">
+                <button id="send-button">发送</button>
             </div>
         </div>
     </div>
+
+    <script>
+        const sendButton = document.getElementById('send-button');
+        const messageInput = document.getElementById('message-input');
+        const chatMessages = document.getElementById('chat-messages');
+
+        sendButton.addEventListener('click', () => {
+            const message = messageInput.value.trim();
+            if (message) {
+                const messageElement = document.createElement('p');
+                messageElement.innerHTML = `<strong>你:</strong> ${message}`;
+                chatMessages.appendChild(messageElement);
+                messageInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                // 调用 Deepseek API 示例
+                fetch('https://api.deepseek.com/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_API_KEY'
+                    },
+                    body: JSON.stringify({ message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    const replyElement = document.createElement('p');
+                    replyElement.innerHTML = `<strong>Deepseek:</strong> ${data.reply}`;
+                    chatMessages.appendChild(replyElement);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
 </body>
 </html>
