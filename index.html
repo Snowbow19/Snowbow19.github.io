@@ -162,6 +162,25 @@
         const messageInput = document.getElementById('message-input');
         const chatMessages = document.getElementById('chat-messages');
 
+        function analyzeMessage(message) {
+            fetch('https://api.deepseek.com/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer sk-07eedab75e7f4255b8131ee5ff3b5f08'
+                },
+                body: JSON.stringify({ message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const replyElement = document.createElement('p');
+                replyElement.innerHTML = `<strong>Deepseek:</strong> ${data.reply}`;
+                chatMessages.appendChild(replyElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
         sendButton.addEventListener('click', () => {
             const message = messageInput.value.trim();
             if (message) {
@@ -171,23 +190,13 @@
                 messageInput.value = '';
                 chatMessages.scrollTop = chatMessages.scrollHeight;
 
-                // 调用 Deepseek API 示例
-                fetch('https://api.deepseek.com/analyze', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer YOUR_API_KEY'
-                    },
-                    body: JSON.stringify({ message })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    const replyElement = document.createElement('p');
-                    replyElement.innerHTML = `<strong>Deepseek:</strong> ${data.reply}`;
-                    chatMessages.appendChild(replyElement);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                })
-                .catch(error => console.error('Error:', error));
+                analyzeMessage(message);
+            }
+        });
+
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
             }
         });
     </script>
