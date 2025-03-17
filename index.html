@@ -3,121 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Application</title>
+    <title>校园二手平台</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
+            background-color: #f9f9f9;
         }
-        .chat-header {
-            background-color: #7289da;
+        header {
+            background-color: #007FFF;
             color: white;
-            padding: 10px;
+            padding: 15px 20px;
             text-align: center;
         }
-        .chat-messages {
-            flex: 1;
-            padding: 10px;
-            overflow-y: auto;
-            background-color: #f4f4f4;
-        }
-        .chat-input {
+        nav {
             display: flex;
-            padding: 10px;
-            background-color: #ddd;
+            justify-content: center;
+            background-color: #005BBB;
+            padding: 10px 0;
         }
-        .chat-input input {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .chat-input input:focus {
-            outline: none;
-            box-shadow: 0 0 5px rgba(114, 137, 218, 0.8);
-        }
-        .chat-input button {
-            margin-left: 10px;
-            padding: 10px 20px;
-            background-color: #7289da;
+        nav a {
             color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 16px;
         }
-        .chat-input button:hover {
-            background-color: #5b6eae;
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+        }
+        .item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+        .item-details {
+            flex: 1;
+        }
+        .item-details h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+        .item-details p {
+            margin: 5px 0;
+            color: #555;
+        }
+        .item-details .price {
+            color: #007FFF;
+            font-weight: bold;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #005BBB;
+            color: white;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="chat-header">
-        <h2>聊天应用</h2>
+    <header>
+        <h1>校园二手平台</h1>
+    </header>
+    <nav>
+        <a href="#home">首页</a>
+        <a href="#sell">我要卖</a>
+        <a href="#buy">我要买</a>
+        <a href="#contact">联系我们</a>
+    </nav>
+    <div class="container">
+        <h2>最新商品</h2>
+        <div class="item">
+            <img src="https://via.placeholder.com/120" alt="商品图片">
+            <div class="item-details">
+                <h3>二手书籍：高等数学</h3>
+                <p>九成新，适合大一学生使用。</p>
+                <p class="price">￥20</p>
+            </div>
+        </div>
+        <div class="item">
+            <img src="https://via.placeholder.com/120" alt="商品图片">
+            <div class="item-details">
+                <h3>二手自行车</h3>
+                <p>七成新，适合校园代步。</p>
+                <p class="price">￥150</p>
+            </div>
+        </div>
+        <div class="item">
+            <img src="https://via.placeholder.com/120" alt="商品图片">
+            <div class="item-details">
+                <h3>二手耳机</h3>
+                <p>音质良好，带麦克风。</p>
+                <p class="price">￥50</p>
+            </div>
+        </div>
     </div>
-    <div class="chat-messages" id="chat-messages">
-        <!-- Messages will appear here -->
-    </div>
-    <div class="chat-input">
-        <input type="text" id="message-input" placeholder="输入消息..." aria-label="输入消息">
-        <button id="send-button" aria-label="发送消息">发送</button>
-    </div>
-
-    <script>
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        const chatMessages = document.getElementById('chat-messages');
-
-        sendButton.addEventListener('click', () => {
-            const message = messageInput.value.trim();
-            if (message) {
-                // Display the message in the chat
-                const messageElement = document.createElement('div');
-                messageElement.textContent = message;
-                chatMessages.appendChild(messageElement);
-
-                // Clear the input field
-                messageInput.value = '';
-
-                // Call the API (replace YOUR_API_KEY with a valid key)
-                fetch('https://api.deepseek.com/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer sk-58cce9dfdf3c47fca21ed80a9ac3bca2'
-                    },
-                    body: JSON.stringify({ message })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Display the API response in the chat
-                    const responseElement = document.createElement('div');
-                    responseElement.textContent = `Bot: ${data.reply}`;
-                    chatMessages.appendChild(responseElement);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    const errorElement = document.createElement('div');
-                    errorElement.textContent = 'Error: Unable to fetch response.';
-                    chatMessages.appendChild(errorElement);
-                });
-            }
-        });
-    </script>
+    <footer>
+        <p>© 2025 校园二手平台. 版权所有.</p>
+    </footer>
 </body>
 </html>
-<script>
-    messageInput.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendButton.click();
-        }
-    });
-</script>
